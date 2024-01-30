@@ -15,5 +15,5 @@ public class PaymentCardCostRequestDto {
 
     @NotBlank(message = "PAN cannot be blank")
     @Pattern(regexp = "^[0-9]{8,19}$", message = "Invalid PAN format. It must be an 8 to 19 digit number.")
-    private String pan;
+    private String card_number;
 }
