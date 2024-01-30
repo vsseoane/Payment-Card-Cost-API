@@ -26,7 +26,7 @@ public class CountryCostMatrixController {
     }
 
     @GetMapping("country-cost-matrix/{country}")
-    public ResponseEntity<CountryCostMatrixDto> getCountryCostMatrixByCountry(@RequestParam String country) {
+    public ResponseEntity<CountryCostMatrixDto> getCountryCostMatrixByCountry(@PathVariable String country) {
         return ResponseEntity.ok(this.countryCostMatrixService.getCountryCostMatrixByCountry(country));
     }
 
