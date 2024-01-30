@@ -12,8 +12,20 @@ import java.util.Date;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CountryCostMatrixNotFoundException.class)
-    public ResponseEntity<ErrorObject> handlePaymentCardCostNotFoundException(CountryCostMatrixNotFoundException ex,
-                                                                              WebRequest request) {
+    public ResponseEntity<ErrorObject> handleCountryCostMatrixNotFoundException(CountryCostMatrixNotFoundException ex,
+                                                                                WebRequest request) {
+        ErrorObject errorObject = new ErrorObject();
+
+        errorObject.setStatusCode((HttpStatus.NOT_FOUND.value()));
+        errorObject.setMessage(ex.getMessage());
+        errorObject.setTimestamp(new Date());
+        return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.NOT_FOUND);
+
+    }
+
+    @ExceptionHandler(PaymentCardCostCalculationUnProcessAbleContentException.class)
+    public ResponseEntity<ErrorObject> handlePaymentCardCostCalculationNotFoundException(CountryCostMatrixNotFoundException ex,
+                                                                                WebRequest request) {
         ErrorObject errorObject = new ErrorObject();
 
         errorObject.setStatusCode((HttpStatus.NOT_FOUND.value()));
