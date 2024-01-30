@@ -5,13 +5,10 @@ import com.etraveli.paymentCardsCostTest.dto.CountryCostMatrixDto;
 import com.etraveli.paymentCardsCostTest.dto.PaymentCardCostDto;
 import com.etraveli.paymentCardsCostTest.dto.PaymentCardCostResponseDto;
 import com.etraveli.paymentCardsCostTest.exceptions.CountryCostMatrixNotFoundException;
-import com.etraveli.paymentCardsCostTest.repository.ICountryCostMatrixRepository;
 import com.etraveli.paymentCardsCostTest.services.ICountryCostMatrixService;
 import com.etraveli.paymentCardsCostTest.services.IPaymentCardCostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class PaymentCardCostService implements IPaymentCardCostService {
