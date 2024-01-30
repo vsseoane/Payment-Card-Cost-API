@@ -1,9 +1,9 @@
 package com.etraveli.paymentCardsCostTest.apiCall;
 
 import java.util.logging.Logger;
+
 import com.etraveli.paymentCardsCostTest.dto.BinTableApiResponse.BinTableApiResponse;
 import com.etraveli.paymentCardsCostTest.exceptions.PaymentCardCostCalculationUnProcessAbleContentException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,6 @@ public class ApiCallService implements IApiCallService {
     private static final Logger logger = Logger.getLogger(ApiCallService.class.getName());
 
 
-
     private RestTemplate restTemplate;
 
     public ApiCallService(RestTemplate restTemplate) {
@@ -33,12 +32,12 @@ public class ApiCallService implements IApiCallService {
             String apiUrl = baseUrl + "/" + iin + "?api_key=" + apiKey;
             ResponseEntity<BinTableApiResponse> response = restTemplate.getForEntity(apiUrl, BinTableApiResponse.class);
             response.getBody();
-            if(response.getBody() == null)
+            if (response.getBody() == null)
                 throw new PaymentCardCostCalculationUnProcessAbleContentException("The requested resource for iin: " + iin +
                         " could not be found");
 
             return response.getBody().getData().getCountry().getCode();
-        } catch(Exception e) {
+        } catch (Exception e) {
             logger.severe("The requested resource for iin: " + iin +
                     " could not be found. Error: " + e.getMessage());
             throw new PaymentCardCostCalculationUnProcessAbleContentException("The requested resource for iin: " + iin +
