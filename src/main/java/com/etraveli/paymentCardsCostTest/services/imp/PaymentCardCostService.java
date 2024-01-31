@@ -5,6 +5,7 @@ import com.etraveli.paymentCardsCostTest.dto.CountryCostMatrixDto;
 import com.etraveli.paymentCardsCostTest.dto.PaymentCardCostDto;
 import com.etraveli.paymentCardsCostTest.dto.PaymentCardCostResponseDto;
 import com.etraveli.paymentCardsCostTest.exceptions.CountryCostMatrixNotFoundException;
+import com.etraveli.paymentCardsCostTest.exceptions.PaymentCardCostCalculationUnProcessAbleContentException;
 import com.etraveli.paymentCardsCostTest.services.ICountryCostMatrixService;
 import com.etraveli.paymentCardsCostTest.services.IPaymentCardCostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,12 @@ public class PaymentCardCostService implements IPaymentCardCostService {
             paymentCardCostResponseDto.setCountry(country);
             paymentCardCostResponseDto.setCost(costIin);
             return paymentCardCostResponseDto;
+        } catch( CountryCostMatrixNotFoundException e ) {
+            throw new CountryCostMatrixNotFoundException("Unable to retrieve " +
+                    "cost for the specified IIN, more info: " + e.getMessage());
         } catch( Exception e ) {
             System.out.println("Error: " + e.getMessage()); //TODO: Change it for logger
-            throw new CountryCostMatrixNotFoundException("Unable to retrieve " +
+            throw new PaymentCardCostCalculationUnProcessAbleContentException("Unable to retrieve " +
                 "cost for the specified IIN");
 
         }
