@@ -16,7 +16,7 @@ public class CountryCostMatrixDto {
 
     @NotNull(message = "Country cannot be null")
     @NotBlank(message = "Country cannot be blank")
-    @Pattern(regexp = "^[A-Za-z]{2}$", message = "Invalid country code format, it should be iso2-code")
+    @Pattern(regexp = "^(?:[A-Za-z]{2}|other|OTHER)$", message = "Invalid country code format, it should be iso2-code, other, or OTHER")
     private  String country;
 
     @NotNull(message = "Cost cannot be null")
