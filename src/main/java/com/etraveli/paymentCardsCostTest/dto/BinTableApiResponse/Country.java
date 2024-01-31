@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Country {
     private String name;
-    private String code;
-    private String flag;
+    private String alpha2;
     private String currency;
-    private String currency_code;
 }
+

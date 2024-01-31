@@ -26,7 +26,7 @@ public class PaymentCardCostController {
     public ResponseEntity<PaymentCardCostResponseDto> calculatePaymentCardCost(@RequestBody PaymentCardCostRequestDto paymentCardCostRequestDto) {
 
         PaymentCardCostDto paymentCardCostDto = new PaymentCardCostDto();
-        paymentCardCostDto.setIin(paymentCardCostRequestDto.getCard_number().substring(0,5)); //TODO: validate size
+        paymentCardCostDto.setIin(paymentCardCostRequestDto.getCard_number().substring(0,6));
         return new ResponseEntity<>(this.paymentCardCostService.calculatePaymentCardCost(paymentCardCostDto), HttpStatus.OK);
     }
 

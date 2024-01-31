@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BinTableApiResponse {
 
-    private int result;
-    private String message;
-    private BinTableData data;
+    private String scheme;
+    private String type;
+    private Country country;
 }

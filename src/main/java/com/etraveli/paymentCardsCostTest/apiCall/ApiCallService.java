@@ -15,9 +15,6 @@ public class ApiCallService implements IApiCallService {
     @Value("${binTableApi.baseUrl}")
     private String baseUrl;
 
-    @Value("${binTableApi.apiKey}")
-    private String apiKey;
-
     private static final Logger logger = Logger.getLogger(ApiCallService.class.getName());
 
 
@@ -29,14 +26,14 @@ public class ApiCallService implements IApiCallService {
 
     public String getCountryByIin(String iin) {
         try {
-            String apiUrl = baseUrl + "/" + iin + "?api_key=" + apiKey;
+            String apiUrl = baseUrl + "/" + iin;
             ResponseEntity<BinTableApiResponse> response = restTemplate.getForEntity(apiUrl, BinTableApiResponse.class);
             response.getBody();
             if (response.getBody() == null)
                 throw new PaymentCardCostCalculationUnProcessAbleContentException("The requested resource for iin: " + iin +
                         " could not be found");
 
-            return response.getBody().getData().getCountry().getCode();
+            return response.getBody().getCountry().getAlpha2();
         } catch (Exception e) {
             logger.severe("The requested resource for iin: " + iin +
                     " could not be found. Error: " + e.getMessage());

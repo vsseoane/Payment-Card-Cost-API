@@ -2,12 +2,10 @@ package com.etraveli.paymentCardsCostTest.integration;
 
 import com.etraveli.paymentCardsCostTest.apiCall.ApiCallService;
 import com.etraveli.paymentCardsCostTest.apiCall.IApiCallService;
-import com.etraveli.paymentCardsCostTest.controller.PaymentCardCostController;
 import com.etraveli.paymentCardsCostTest.dto.BinTableApiResponse.BinTableApiResponse;
-import com.etraveli.paymentCardsCostTest.dto.BinTableApiResponse.BinTableData;
 import com.etraveli.paymentCardsCostTest.dto.BinTableApiResponse.Country;
+import com.etraveli.paymentCardsCostTest.dto.CountryCostMatrixDto;
 import com.etraveli.paymentCardsCostTest.dto.PaymentCardCostDto;
-import com.etraveli.paymentCardsCostTest.dto.PaymentCardCostRequestDto;
 import com.etraveli.paymentCardsCostTest.dto.PaymentCardCostResponseDto;
 import com.etraveli.paymentCardsCostTest.exceptions.CountryCostMatrixNotFoundException;
 import com.etraveli.paymentCardsCostTest.exceptions.PaymentCardCostCalculationUnProcessAbleContentException;
@@ -67,7 +65,6 @@ public class PaymentCardCostServiceTests {
 
         PaymentCardCostResponseDto paymentCardCostResponseDto = paymentCardCostService.calculatePaymentCardCost(paymentCardCostDto);
 
-
         Assertions.assertEquals(expectedPaymentCardCostResponseDto, paymentCardCostResponseDto);
     }
 
@@ -86,52 +83,16 @@ public class PaymentCardCostServiceTests {
 
     @Test
     public void testPaymentCardCostService_ApiNotResponse() {
-
         Mockito.when(this.restTemplate.getForEntity(any(String.class), eq(BinTableApiResponse.class)))
                 .thenReturn(ResponseEntity.badRequest().body(null));
-
 
         Assertions.assertThrows(PaymentCardCostCalculationUnProcessAbleContentException.class,
                 () -> paymentCardCostService.calculatePaymentCardCost(paymentCardCostDto));
     }
 
-
     private BinTableApiResponse getBinTableApiResponseMock() {
-
-        BinTableApiResponse binTableApiResponse = BinTableApiResponse.builder()
-                .message("SUCCESS")
-                .result(200)
-                .data(
-                        BinTableData.builder()
-                                .country(
-                                        Country.builder()
-                                                .name("Argentina")
-                                                .code("AR")
-                                                .build()
-                                )
-                                .build()
-                )
-                .build();
-        return binTableApiResponse;
-    }
-
-    private BinTableApiResponse getBinTableApiNotResponseMock() {
-
-        BinTableApiResponse binTableApiResponse = BinTableApiResponse.builder()
-                .message("FAIL")
-                .result(500)
-                .data(
-                        BinTableData.builder()
-                                .country(
-                                        Country.builder()
-                                                .name("")
-                                                .code("")
-                                                .build()
-                                )
-                                .build()
-                )
-                .build();
-        return binTableApiResponse;
+        return BinTableApiResponse.builder().scheme("visa").type("debit")
+                .country(Country.builder().name("Argentina").alpha2("AR").currency("ARG").build()).build();
     }
 
 }
