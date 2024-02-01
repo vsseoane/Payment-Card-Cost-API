@@ -25,31 +25,19 @@ public class PaymentCardCostService implements IPaymentCardCostService {
     }
     @Override
     public PaymentCardCostResponseDto calculatePaymentCardCost(PaymentCardCostDto paymentCardCostDto) {
-        try {
-            String country = this.apiCallService.getCountryByIin(paymentCardCostDto.getIin());
-            CountryCostMatrixDto countryCostMatrixDto = this.countryCostMatrixService.getCountryCostMatrixByCountry(country);
-            if (countryCostMatrixDto == null) {
-                countryCostMatrixDto = this.countryCostMatrixService.getCountryCostMatrixByCountry("OTHER");
-                if(countryCostMatrixDto == null) throw new CountryCostMatrixNotFoundException("Unable to retrieve " +
-                        "cost for the specified IIN: " + paymentCardCostDto.getIin());
-                country = "OTHER";
-            }
-            double costIin = countryCostMatrixDto.getCostUSD();
-            PaymentCardCostResponseDto paymentCardCostResponseDto = new PaymentCardCostResponseDto();
-            paymentCardCostResponseDto.setCountry(country);
-            paymentCardCostResponseDto.setCost(costIin);
-            return paymentCardCostResponseDto;
-        } catch( CountryCostMatrixNotFoundException e ) {
-            throw new CountryCostMatrixNotFoundException("Unable to retrieve " +
-                    "cost for the specified IIN, more info: " + e.getMessage());
-        } catch( PaymentCardCostCalculationTooManyRequestsException e ) {
-            throw new PaymentCardCostCalculationTooManyRequestsException(e.getMessage());
-        } catch( Exception e ) {
-            System.out.println("Error: " + e.getMessage()); //TODO: Change it for logger
-            throw new PaymentCardCostCalculationUnProcessAbleContentException(e.getMessage());
-
+        String country = this.apiCallService.getCountryByIin(paymentCardCostDto.getIin());
+        CountryCostMatrixDto countryCostMatrixDto = this.countryCostMatrixService.getCountryCostMatrixByCountry(country);
+        if (countryCostMatrixDto == null) {
+            countryCostMatrixDto = this.countryCostMatrixService.getCountryCostMatrixByCountry("OTHER");
+            if(countryCostMatrixDto == null) throw new CountryCostMatrixNotFoundException("Unable to retrieve " +
+                    "cost for the specified IIN: " + paymentCardCostDto.getIin());
+            country = "OTHER";
         }
-
+        double costIin = countryCostMatrixDto.getCostUSD();
+        PaymentCardCostResponseDto paymentCardCostResponseDto = new PaymentCardCostResponseDto();
+        paymentCardCostResponseDto.setCountry(country);
+        paymentCardCostResponseDto.setCost(costIin);
+        return paymentCardCostResponseDto;
     }
 
 }
