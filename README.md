@@ -1,6 +1,10 @@
 # Payment Card Cost API
  Payment Card Cost API
 
+## To RUN LOCAL
+1. Copy example_application_properties_run_local to application.properties
+2. Install Postgres
+3. Done
 
 ## To RUN
 1. Generate package:
