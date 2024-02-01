@@ -7,9 +7,11 @@ import com.etraveli.paymentCardsCostTest.models.CountryCostMatrix;
 import com.etraveli.paymentCardsCostTest.repository.ICountryCostMatrixRepository;
 import com.etraveli.paymentCardsCostTest.services.ICountryCostMatrixService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class CountryCostMatrixService implements ICountryCostMatrixService {
@@ -30,25 +32,33 @@ public class CountryCostMatrixService implements ICountryCostMatrixService {
 
     @Override
     public CountryCostMatrixDto getCountryCostMatrixByCountry(String country) {
-        CountryCostMatrix countryCostMatrix = this.countryCostMatrixRepository.findByCountry(country)
-                .orElseThrow(() -> new CountryCostMatrixNotFoundException("Country Cost Matrix  could not be found by country " + country));
-
-        return mapToDto(countryCostMatrix);
+        Optional<CountryCostMatrix> countryCostMatrix = this.countryCostMatrixRepository.findByCountry(country);
+        if (countryCostMatrix.isEmpty()) return null; //TODO: refactor
+        return mapToDto(countryCostMatrix.get());
     }
 
     @Override
     public CountryCostMatrixDto createCountryCostMatrixDto(CountryCostMatrixDto countryCostMatrixDto) {
-        CountryCostMatrix countryCostMatrix = new CountryCostMatrix();
-        countryCostMatrix.setCostUSD(countryCostMatrixDto.getCostUSD());
-        countryCostMatrix.setCountry(countryCostMatrixDto.getCountry());
 
-        CountryCostMatrix newCountryCostMatrix = this.countryCostMatrixRepository.save(countryCostMatrix);
+        try{
+            CountryCostMatrix countryCostMatrix = new CountryCostMatrix();
+            countryCostMatrix.setCostUSD(countryCostMatrixDto.getCostUSD());
+            countryCostMatrix.setCountry(countryCostMatrixDto.getCountry());
+            CountryCostMatrix newCountryCostMatrix = this.countryCostMatrixRepository.save(countryCostMatrix);
+            CountryCostMatrixDto countryCostMatrixDtoResponse = new CountryCostMatrixDto();
+            countryCostMatrixDtoResponse.setCostUSD(newCountryCostMatrix.getCostUSD());
+            countryCostMatrixDtoResponse.setCountry(newCountryCostMatrix.getCountry());
+            countryCostMatrixDtoResponse.setId(newCountryCostMatrix.getId());
+            return countryCostMatrixDtoResponse;
 
-        CountryCostMatrixDto countryCostMatrixDtoResponse = new CountryCostMatrixDto();
-        countryCostMatrixDtoResponse.setCostUSD(newCountryCostMatrix.getCostUSD());
-        countryCostMatrixDtoResponse.setCountry(newCountryCostMatrix.getCountry());
-        countryCostMatrixDtoResponse.setId(newCountryCostMatrix.getId());
-        return countryCostMatrixDtoResponse;
+        } catch (Exception e) {
+            if(e.getMessage().contains("duplicate key value violates")) {
+                throw new CountryCostMatrixNotFoundException("Country must be unique");
+            } else {
+                throw new CountryCostMatrixNotFoundException("Is not possible to add the country cost matrix "
+                        + countryCostMatrixDto.getId() + " .More info: " + e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -65,8 +75,8 @@ public class CountryCostMatrixService implements ICountryCostMatrixService {
     @Override
     public void deleteCountryCostMatrix(long countryCostMatrixId) {
         CountryCostMatrix countryCostMatrix = this.countryCostMatrixRepository.findById(countryCostMatrixId)
-                .orElseThrow(() -> new CountryCostMatrixNotFoundException("Country Cost Matrix with " +
-                        countryCostMatrixId + " could not be deleted" ) );
+                .orElseThrow(() -> new CountryCostMatrixNotFoundException("Sorry, we couldn't delete the Country Cost " +
+                        "Matrix with ID " + countryCostMatrixId + ". Please check if the ID exists." ) );
         this.countryCostMatrixRepository.delete(countryCostMatrix);
     }
 
