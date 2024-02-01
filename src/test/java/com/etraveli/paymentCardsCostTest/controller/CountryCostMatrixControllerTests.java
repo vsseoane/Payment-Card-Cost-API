@@ -18,9 +18,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import static org.hamcrest.Matchers.containsString;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -40,6 +40,7 @@ public class CountryCostMatrixControllerTests {
     private ObjectMapper objectMapper;
     private CountryCostMatrix countryCostMatrix;
     private CountryCostMatrixDto countryCostMatrixDto;
+    private CountryCostMatrixController countryCostMatrixController;
 
     @BeforeEach
     public void init() {
@@ -47,6 +48,8 @@ public class CountryCostMatrixControllerTests {
                 .costUSD(100).country("AR").build();
         countryCostMatrixDto = CountryCostMatrixDto.builder()
                 .costUSD(100).country("AR").build();
+
+        countryCostMatrixController = new CountryCostMatrixController(countryCostMatrixService);
     }
 
     @Test
@@ -63,6 +66,22 @@ public class CountryCostMatrixControllerTests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.costUSD", CoreMatchers.is(countryCostMatrixDto.getCostUSD())));
 
     }
+
+    @Test
+    public void testCreateCountryCostMatrixWithInvalidData() throws Exception {
+        CountryCostMatrixDto invalidDto = new CountryCostMatrixDto();
+        invalidDto.setCountry("");
+        invalidDto.setCostUSD(-10);
+
+        ResultActions response = mockMvc.perform(post("/api/country-cost-matrix")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidDto)));
+
+        System.out.println("Response Content: " + response.andReturn().getResponse().getContentAsString());
+        response.andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string(containsString("Validation error")));
+    }
+
 
     @Test
     public void CountryCostMatrixController_GetAllCountryCostMatrix() throws Exception {
