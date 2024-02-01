@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class CountryCostMatrixService implements ICountryCostMatrixService {
@@ -31,10 +32,9 @@ public class CountryCostMatrixService implements ICountryCostMatrixService {
 
     @Override
     public CountryCostMatrixDto getCountryCostMatrixByCountry(String country) {
-        CountryCostMatrix countryCostMatrix = this.countryCostMatrixRepository.findByCountry(country)
-                .orElseThrow(() -> new CountryCostMatrixNotFoundException("Country Cost Matrix  could not be found by country " + country));
-
-        return mapToDto(countryCostMatrix);
+        Optional<CountryCostMatrix> countryCostMatrix = this.countryCostMatrixRepository.findByCountry(country);
+        if (countryCostMatrix.isEmpty()) return null; //TODO: refactor
+        return mapToDto(countryCostMatrix.get());
     }
 
     @Override
@@ -58,8 +58,6 @@ public class CountryCostMatrixService implements ICountryCostMatrixService {
                 throw new CountryCostMatrixNotFoundException("Is not possible to add the country cost matrix "
                         + countryCostMatrixDto.getId() + " .More info: " + e.getMessage());
             }
-
-
         }
     }
 
@@ -77,8 +75,8 @@ public class CountryCostMatrixService implements ICountryCostMatrixService {
     @Override
     public void deleteCountryCostMatrix(long countryCostMatrixId) {
         CountryCostMatrix countryCostMatrix = this.countryCostMatrixRepository.findById(countryCostMatrixId)
-                .orElseThrow(() -> new CountryCostMatrixNotFoundException("Country Cost Matrix with " +
-                        countryCostMatrixId + " could not be deleted" ) );
+                .orElseThrow(() -> new CountryCostMatrixNotFoundException("Sorry, we couldn't delete the Country Cost " +
+                        "Matrix with ID " + countryCostMatrixId + ". Please check if the ID exists." ) );
         this.countryCostMatrixRepository.delete(countryCostMatrix);
     }
 

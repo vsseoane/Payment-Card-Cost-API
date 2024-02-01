@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(PaymentCardCostCalculationUnProcessAbleContentException.class)
-    public ResponseEntity<ErrorObject> handlePaymentCardCostCalculationNotFoundException(CountryCostMatrixNotFoundException ex,
+    public ResponseEntity<ErrorObject> handlePaymentCardCostCalculationNotFoundException(PaymentCardCostCalculationUnProcessAbleContentException ex,
                                                                                 WebRequest request) {
         ErrorObject errorObject = new ErrorObject();
 
@@ -40,4 +40,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.NOT_FOUND);
 
     }
+
+    @ExceptionHandler(PaymentCardCostCalculationTooManyRequestsException.class)
+    public ResponseEntity<ErrorObject> handlePaymentCardCostCalculationTooManyRequestsExceptionn(PaymentCardCostCalculationTooManyRequestsException ex,
+                                                                                         WebRequest request) {
+        ErrorObject errorObject = new ErrorObject();
+
+        errorObject.setStatusCode((HttpStatus.TOO_MANY_REQUESTS.value()));
+        errorObject.setMessage(ex.getMessage());
+        errorObject.setTimestamp(new Date());
+        return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.TOO_MANY_REQUESTS);
+
+    }
+
+
 }
