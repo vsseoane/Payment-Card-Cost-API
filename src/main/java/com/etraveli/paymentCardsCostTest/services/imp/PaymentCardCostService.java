@@ -5,6 +5,7 @@ import com.etraveli.paymentCardsCostTest.dto.CountryCostMatrixDto;
 import com.etraveli.paymentCardsCostTest.dto.PaymentCardCostDto;
 import com.etraveli.paymentCardsCostTest.dto.PaymentCardCostResponseDto;
 import com.etraveli.paymentCardsCostTest.exceptions.CountryCostMatrixNotFoundException;
+import com.etraveli.paymentCardsCostTest.exceptions.PaymentCardCostCalculationTooManyRequestsException;
 import com.etraveli.paymentCardsCostTest.exceptions.PaymentCardCostCalculationUnProcessAbleContentException;
 import com.etraveli.paymentCardsCostTest.services.ICountryCostMatrixService;
 import com.etraveli.paymentCardsCostTest.services.IPaymentCardCostService;
@@ -27,8 +28,12 @@ public class PaymentCardCostService implements IPaymentCardCostService {
         try {
             String country = this.apiCallService.getCountryByIin(paymentCardCostDto.getIin());
             CountryCostMatrixDto countryCostMatrixDto = this.countryCostMatrixService.getCountryCostMatrixByCountry(country);
-            if (countryCostMatrixDto == null) throw new CountryCostMatrixNotFoundException("Unable to retrieve " +
-                    "cost for the specified IIN: " + paymentCardCostDto.getIin());
+            if (countryCostMatrixDto == null) {
+                countryCostMatrixDto = this.countryCostMatrixService.getCountryCostMatrixByCountry("OTHER");
+                if(countryCostMatrixDto == null) throw new CountryCostMatrixNotFoundException("Unable to retrieve " +
+                        "cost for the specified IIN: " + paymentCardCostDto.getIin());
+                country = "OTHER";
+            }
             double costIin = countryCostMatrixDto.getCostUSD();
             PaymentCardCostResponseDto paymentCardCostResponseDto = new PaymentCardCostResponseDto();
             paymentCardCostResponseDto.setCountry(country);
@@ -37,10 +42,11 @@ public class PaymentCardCostService implements IPaymentCardCostService {
         } catch( CountryCostMatrixNotFoundException e ) {
             throw new CountryCostMatrixNotFoundException("Unable to retrieve " +
                     "cost for the specified IIN, more info: " + e.getMessage());
+        } catch( PaymentCardCostCalculationTooManyRequestsException e ) {
+            throw new PaymentCardCostCalculationTooManyRequestsException(e.getMessage());
         } catch( Exception e ) {
             System.out.println("Error: " + e.getMessage()); //TODO: Change it for logger
-            throw new PaymentCardCostCalculationUnProcessAbleContentException("Unable to retrieve " +
-                "cost for the specified IIN");
+            throw new PaymentCardCostCalculationUnProcessAbleContentException(e.getMessage());
 
         }
 
