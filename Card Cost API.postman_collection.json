@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "86f83be6-6b22-49df-996d-5a5e48faf930",
+		"name": "Card Cost API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2095672"
+	},
+	"item": [
+		{
+			"name": "Get paymentCardCosts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/country-cost-matrix",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"country-cost-matrix"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get paymentCardCosts by Country",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/country-cost-matrix/AR",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"country-cost-matrix",
+						"AR"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete  paymentCardCosts by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/country-cost-matrix/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"country-cost-matrix",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create paymentCardCosts",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n    \"country\":\"AL\",\n    \"costUSD\":20\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/country-cost-matrix",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"country-cost-matrix"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Payment Cards Cost",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n    \"card_number\": \"4111111111111\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/payment-cards-cost",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"payment-cards-cost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update paymentCardCosts",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"costUSD\": 5,\n    \"country\":\"PE\"\n}\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/country-cost-matrix/2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"country-cost-matrix",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
