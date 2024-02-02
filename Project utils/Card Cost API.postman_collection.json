@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Get paymentCardCosts",
+			"name": "Get country-cost-matrix",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -24,49 +24,49 @@
 			"response": []
 		},
 		{
-			"name": "Get paymentCardCosts by Country",
+			"name": "Get country-cost-matrix by Country",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/country-cost-matrix/AR",
+					"raw": "{{url}}/country-cost-matrix/DK",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"country-cost-matrix",
-						"AR"
+						"DK"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Delete  paymentCardCosts by id",
+			"name": "Delete  country-cost-matrix by id",
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/country-cost-matrix/1",
+					"raw": "{{url}}/country-cost-matrix/2",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"country-cost-matrix",
-						"1"
+						"2"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Create paymentCardCosts",
+			"name": "Create country-cost-matrix",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\n    \"country\":\"AL\",\n    \"costUSD\":20\n}",
+					"raw": "{\n\n    \"country\":\"OTHER\",\n    \"costUSD\":18\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -112,13 +112,13 @@
 			"response": []
 		},
 		{
-			"name": "Update paymentCardCosts",
+			"name": "Update country-cost-matrix",
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"costUSD\": 5,\n    \"country\":\"PE\"\n}\n\n",
+					"raw": "{\n    \"costUSD\": 8,\n    \"country\":\"DK\"\n}\n\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -126,13 +126,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/country-cost-matrix/2",
+					"raw": "{{url}}/country-cost-matrix/1",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"country-cost-matrix",
-						"2"
+						"1"
 					]
 				}
 			},
